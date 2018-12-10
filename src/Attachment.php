@@ -533,6 +533,9 @@ class Attachment implements AttachmentInterface, JsonSerializable
     protected function flushWrites()
     {
         foreach ($this->queuedForWrite as $style) {
+            if ($style->name != 'original' && !$this->uploadedFile->isImage()) {
+                continue;
+            }
             if ($style->dimensions && $this->uploadedFile->isImage()) {
                 $file = $this->resizer->resize($this->uploadedFile, $style);
             } else {
